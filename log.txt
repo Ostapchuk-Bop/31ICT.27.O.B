@@ -1,0 +1,51 @@
+15:11:39.526: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false init
+Initialized empty Git repository in C:/Users/bogda/PycharmProjects/Ostapchuk/.git/
+15:11:44.060: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- .
+warning: in the working copy of '.idea/inspectionProfiles/profiles_settings.xml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.idea/workspace.xml', LF will be replaced by CRLF the next time Git touches it
+15:12:13.530: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- main.py
+15:12:22.365: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- test_main.http
+15:13:21.588: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- .idea/misc.xml
+15:17:34.662: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- .gitignore
+15:21:58.173: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- poetry.lock
+15:22:35.747: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c core.quotepath=false -c log.showSignature=false config --global user.name bogda
+15:22:35.860: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c core.quotepath=false -c log.showSignature=false config --global user.email "bogdanostapcuk78@gmail.com "
+15:22:36.453: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false reset -- .idea/modules.xml .idea/Ostapchuk.iml test_main.http .idea/inspectionProfiles/profiles_settings.xml .idea/vcs.xml .idea/misc.xml .gitignore .idea/workspace.xml
+15:22:36.522: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -f -- pyproject.toml poetry.lock main.py
+15:22:36.656: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false commit -F C:\Users\bogda\AppData\Local\Temp\git-commit-msg-14590757748582826015.txt --amend --
+fatal: You have nothing to amend.
+15:22:36.797: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -f -- .gitignore test_main.http .idea/workspace.xml .idea/modules.xml .idea/Ostapchuk.iml .idea/vcs.xml .idea/misc.xml .idea/inspectionProfiles/profiles_settings.xml
+warning: in the working copy of '.idea/inspectionProfiles/profiles_settings.xml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.idea/workspace.xml', LF will be replaced by CRLF the next time Git touches it
+15:23:18.118: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false reset -- .idea/modules.xml .idea/Ostapchuk.iml test_main.http .idea/inspectionProfiles/profiles_settings.xml .idea/vcs.xml .idea/misc.xml .gitignore .idea/workspace.xml
+15:23:18.196: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -f -- pyproject.toml poetry.lock main.py
+15:23:18.281: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false commit -F C:\Users\bogda\AppData\Local\Temp\git-commit-msg-13841197893517332301.txt --
+[master (root-commit) 59ebc86] 11
+ 3 files changed, 360 insertions(+)
+ create mode 100644 main.py
+ create mode 100644 poetry.lock
+ create mode 100644 pyproject.toml
+15:23:18.501: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -f -- .gitignore test_main.http .idea/workspace.xml .idea/modules.xml .idea/Ostapchuk.iml .idea/vcs.xml .idea/misc.xml .idea/inspectionProfiles/profiles_settings.xml
+warning: in the working copy of '.idea/inspectionProfiles/profiles_settings.xml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.idea/workspace.xml', LF will be replaced by CRLF the next time Git touches it
+15:24:18.725: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false checkout -b Branch_1 HEAD --
+A	.gitignore
+Switched to a new branch 'Branch_1'
+A	.idea/Ostapchuk.iml
+A	.idea/inspectionProfiles/profiles_settings.xml
+A	.idea/misc.xml
+A	.idea/modules.xml
+A	.idea/vcs.xml
+A	.idea/workspace.xml
+A	test_main.http
+15:24:31.633: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false checkout -b Branch_2 HEAD --
+A	.gitignore
+A	.idea/Ostapchuk.iml
+A	.idea/inspectionProfiles/profiles_settings.xml
+Switched to a new branch 'Branch_2'
+A	.idea/misc.xml
+A	.idea/modules.xml
+A	.idea/vcs.xml
+A	.idea/workspace.xml
+A	test_main.http
+15:27:08.832: [C:\Users\bogda\PycharmProjects\Ostapchuk] git -c credential.helper= -c core.quotepath=false -c log.showSignature=false add --ignore-errors -A -- log.txt
