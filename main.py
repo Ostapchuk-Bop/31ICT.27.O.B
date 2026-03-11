@@ -1,13 +1,16 @@
 from fastapi import FastAPI
+import os
 
 app = FastAPI()
 
-
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+def read_root():
+    return {
+        "status": "Running",
+        "container": "FastAPI",
+        "database_url": os.getenv("DATABASE_URL")
+    }
 
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
