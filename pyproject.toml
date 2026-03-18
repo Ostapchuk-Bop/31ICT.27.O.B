@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "fastapi-lab"
+name = "Ostapchuk"
 version = "0.1.0"
-description = "Lab 2: FastAPI + Postgres"
-authors = ["Your Name you@example.com"]
+packages = [{ include = "app" }]
+description = ""
+authors = ["you"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "^0.109.0"
-uvicorn = {extras = ["standard"], version = "^0.27.0"}
-psycopg2-binary = "^2.9.9"
-sqlalchemy = "^2.0.25"
+fastapi = "*"
+uvicorn = "*"
+pydantic = "*"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
