@@ -22,15 +22,96 @@
 - `Dockerfile` — контейнеризація через точку входу
 - `entrypoint.sh` — скрипт запуску сервера
 
-## Запити
+## Встановлення
 
-Підтримуються наступні HTTP-методи:
+1. Клонуй репозиторій у робочу теку:
 
-- `GET /users/` — отримати список користувачів
-- `GET /users/{user_id}` — отримати користувача за ID
-- `POST /users/` — створити користувача
-- `PUT /users/{user_id}` — оновити користувача
-- `DELETE /users/{user_id}` — видалити користувача
+```bash
+git clone <URL репозиторію> lab3-fastapi
+cd lab3-fastapi
+```
+
+2. Створи віртуальне оточення (рекомендовано):
+
+```bash
+python -m venv venv
+```
+
+3. Активуй оточення:
+
+- Windows PowerShell:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+- Windows CMD:
+
+```cmd
+venv\Scripts\activate.bat
+```
+
+4. Встанови залежності:
+
+```bash
+pip install -r requirements.txt
+```
+
+5. Додай `.env` до `.gitignore`, якщо ще не зроблено.
+
+## Локальний запуск
+
+1. Запусти сервер:
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+2. Відкрий документацію OpenAPI:
+
+- `http://127.0.0.1:8000/docs`
+
+3. Перевір роботу CRUD-ендпоїнтів:
+
+- `GET /users/`
+- `GET /users/{user_id}`
+- `POST /users/`
+- `PUT /users/{user_id}`
+- `DELETE /users/{user_id}`
+
+## Запуск у Docker
+
+1. Побудуй Docker-образ:
+
+```bash
+docker build -t lab3-fastapi .
+```
+
+2. Запусти контейнер:
+
+```bash
+docker run --rm -p 8000:8000 lab3-fastapi
+```
+
+3. Або через Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+## Тестування
+
+1. Встанови `pytest`, якщо ще не встановлено:
+
+```bash
+pip install pytest
+```
+
+2. Запусти тести:
+
+```bash
+python -m pytest -q
+```
 
 ## Формат даних
 
@@ -53,44 +134,6 @@
   "email": "oleg2@example.com",
   "is_active": false
 }
-```
-
-## Запуск локально
-
-1. Встановити залежності:
-
-```bash
-pip install -r requirements.txt
-```
-
-2. Запустити сервер:
-
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-3. Відкрити Swagger UI:
-
-- `http://127.0.0.1:8000/docs`
-
-## Запуск у Docker
-
-1. Побудувати образ:
-
-```bash
-docker build -t lab3-fastapi .
-```
-
-2. Запустити контейнер:
-
-```bash
-docker run --rm -p 8000:8000 lab3-fastapi
-```
-
-Або через Docker Compose (якщо потрібно):
-
-```bash
-docker compose up --build
 ```
 
 ## Примітки
