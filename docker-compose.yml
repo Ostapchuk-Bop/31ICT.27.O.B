@@ -1,11 +1,13 @@
-version: "3.9"
 
 services:
   db:
     image: postgres:16
     container_name: postgres_db
     restart: unless-stopped
-    env_file: .env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: lab4_db
     ports:
       - "5432:5432"
     volumes:
@@ -15,7 +17,6 @@ services:
     build: .
     container_name: api_container
     restart: unless-stopped
-    env_file: .env
     depends_on:
       - db
     ports:
@@ -23,7 +24,15 @@ services:
     volumes:
       - ./:/app
     environment:
+      - DATABASE_URL=postgresql+psycopg://postgres:changeme@db/lab4_db
       - RELOAD=1
+
+  adminer:
+    image: adminer
+    container_name: adminer_container
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
 
 volumes:
   pgdata:
