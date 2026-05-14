@@ -1,17 +1,18 @@
+import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.main import app
-from app.db.mem_db import db
-
-client = TestClient(app)
+from app.db.session import get_db
 
 
-def setup_function():
-    db.users.clear()
-    db.next_id = 1
+@pytest.fixture
+def client(override_get_db):
+    app.dependency_overrides[get_db] = override_get_db
+    return TestClient(app)
 
 
-def test_create_user():
+def test_create_user(client):
     response = client.post(
         "/users/",
         json={
@@ -29,7 +30,7 @@ def test_create_user():
     assert data["is_active"] is True
 
 
-def test_read_users_and_user_by_id():
+def test_read_users_and_user_by_id(client):
     client.post(
         "/users/",
         json={
@@ -52,7 +53,7 @@ def test_read_users_and_user_by_id():
     assert user["email"] == "reader@example.com"
 
 
-def test_update_user():
+def test_update_user(client):
     client.post(
         "/users/",
         json={
@@ -78,7 +79,7 @@ def test_update_user():
     assert updated["is_active"] is False
 
 
-def test_delete_user():
+def test_delete_user(client):
     client.post(
         "/users/",
         json={

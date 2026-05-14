@@ -1,142 +1,228 @@
-# Lab 3 — FastAPI CRUD for Users
+# Lab 4 — FastAPI PostgreSQL CRUD
 
-Лабораторна робота з FastAPI: реалізовано CRUD для користувачів з тимчасовою емуляцією бази даних через простий словник.
+Лабораторна робота з FastAPI: реалізовано CRUD для користувачів, постів, категорій, коментарів та тегів з використанням PostgreSQL СУБД та асинхронної роботи з БД.
 
 ## Опис
 
-- Використано FastAPI
-- Емуляція бази даних через `app/db/mem_db.py`
-- Використано роутери: `app/api/router.py` та `app/api/endpoints/users.py`
-- Валідація даних через Pydantic-схеми: `app/schemas/user.py`
-- Точка входу: `app/main.py`
-- Docker-стартап через `entrypoint.sh`
+- Використано FastAPI з асинхронною роботою
+- PostgreSQL як СУБД
+- SQLAlchemy з asyncpg для асинхронних запитів
+- Alembic для міграцій БД
+- Pydantic для конфігурації та валідації
+- Моделі з relationships: one-to-many, one-to-one, many-to-many
+- CRUD для всіх моделей
+- Seed data для тестування
 
 ## Структура проєкту
 
-- `app/main.py` — запуск FastAPI-додатку
-- `app/api/router.py` — підключення роутерів
-- `app/api/endpoints/users.py` — CRUD-ендпоїнти для користувачів
-- `app/schemas/user.py` — Pydantic-схеми
-- `app/crud/crud_user_mem.py` — логіка CRUD над in-memory словником
-- `app/db/mem_db.py` — in-memory база даних
-- `Dockerfile` — контейнеризація через точку входу
-- `entrypoint.sh` — скрипт запуску сервера
+- `app/main.py` — запуск FastAPI-додатку з автостворенням таблиць
+- `app/api/router.py` — підключення всіх роутерів
+- `app/api/endpoints/` — CRUD-ендпоїнти для всіх моделей
+- `app/schemas/` — Pydantic-схеми для всіх моделей
+- `app/crud/` — логіка CRUD для всіх моделей
+- `app/models/` — SQLAlchemy моделі з relationships
+- `app/db/session.py` — async session factory
+- `app/db/base.py` — базова декларативна база
+- `app/core/config.py` — Pydantic конфігурація
+- `alembic/` — міграції БД
+- `seed_data.py` — скрипт для додавання тестових даних
+
+## Моделі та Relationships
+
+- **User**: базова модель користувача
+- **Category**: категорії постів (one-to-many з Post)
+- **Post**: пости (many-to-one з User та Category, one-to-many з Comment, many-to-many з Tag)
+- **Comment**: коментарі (many-to-one з User та Post)
+- **Tag**: теги (many-to-many з Post через PostTag)
 
 ## Встановлення
 
-1. Клонуй репозиторій у робочу теку:
+1. Клонуй репозиторій:
 
 ```bash
-git clone <URL репозиторію> lab3-fastapi
-cd lab3-fastapi
+git clone <URL репозиторію> lab4-fastapi-postgres
+cd lab4-fastapi-postgres
 ```
 
-2. Створи віртуальне оточення (рекомендовано):
+2. Встанови Poetry (якщо ще не встановлено):
+   [Інструкція з встановлення Poetry](https://python-poetry.org/docs/#installation)
+
+3. Встанови залежності:
 
 ```bash
-python -m venv venv
+poetry install
 ```
 
-3. Активуй оточення:
-
-- Windows PowerShell:
-
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-- Windows CMD:
-
-```cmd
-venv\Scripts\activate.bat
-```
-
-4. Встанови залежності:
+4. Активуй віртуальне оточення:
 
 ```bash
-pip install -r requirements.txt
+poetry shell
 ```
 
-5. Додай `.env` до `.gitignore`, якщо ще не зроблено.
+4. Налаштуй змінні середовища в `.env` (якщо потрібно).
 
-## Локальний запуск
+## Запуск з Docker Compose
 
-1. Запусти сервер:
-
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-2. Відкрий документацію OpenAPI:
-
-- `http://127.0.0.1:8000/docs`
-
-3. Перевір роботу CRUD-ендпоїнтів:
-
-- `GET /users/`
-- `GET /users/{user_id}`
-- `POST /users/`
-- `PUT /users/{user_id}`
-- `DELETE /users/{user_id}`
-
-## Запуск у Docker
-
-1. Побудуй Docker-образ:
-
-```bash
-docker build -t lab3-fastapi .
-```
-
-2. Запусти контейнер:
-
-```bash
-docker run --rm -p 8000:8000 lab3-fastapi
-```
-
-3. Або через Docker Compose:
+1. Запусти сервіси:
 
 ```bash
 docker compose up --build
 ```
 
+2. Застосуй міграції (в окремому терміналі):
+
+```bash
+docker compose exec api alembic upgrade head
+```
+
+3. Додай тестові дані:
+
+```bash
+docker compose exec api python seed_data.py
+```
+
+## Локальний запуск
+
+1. Запусти PostgreSQL (локально або через Docker):
+
+```bash
+docker run --name postgres -e POSTGRES_PASSWORD=<your_password> -e POSTGRES_DB=lab4_db -p 5432:5432 -d postgres:16
+```
+
+2. Застосуй міграції:
+
+```bash
+poetry run alembic upgrade head
+```
+
+3. Додай тестові дані:
+
+```bash
+poetry run python seed_data.py
+```
+
+4. Запусти сервер:
+
+```bash
+poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+5. Відкрий документацію:
+
+- `http://127.0.0.1:8000/docs`
+
+## API Ендпоїнти
+
+### Users
+- `GET /users/` — список користувачів
+- `GET /users/{id}` — користувач за ID
+- `POST /users/` — створити користувача
+- `PUT /users/{id}` — оновити користувача
+- `DELETE /users/{id}` — видалити користувача
+
+### Posts
+- `GET /posts/` — список постів
+- `GET /posts/{id}` — пост за ID
+- `POST /posts/` — створити пост
+- `PUT /posts/{id}` — оновити пост
+- `DELETE /posts/{id}` — видалити пост
+
+### Categories
+- `GET /categories/` — список категорій
+- `GET /categories/{id}` — категорія за ID
+- `POST /categories/` — створити категорію
+- `PUT /categories/{id}` — оновити категорію
+- `DELETE /categories/{id}` — видалити категорію
+
+### Comments
+- `GET /comments/` — список коментарів
+- `GET /comments/{id}` — коментар за ID
+- `POST /comments/` — створити коментар
+- `PUT /comments/{id}` — оновити коментар
+- `DELETE /comments/{id}` — видалити коментар
+
+### Tags
+- `GET /tags/` — список тегів
+- `GET /tags/{id}` — тег за ID
+- `POST /tags/` — створити тег
+- `PUT /tags/{id}` — оновити тег
+- `DELETE /tags/{id}` — видалити тег
+
+## Міграції
+
+Створити нову міграцію:
+
+```bash
+alembic revision --autogenerate -m "Your message"
+```
+
+Застосувати міграції:
+
+```bash
+alembic upgrade head
+```
+
 ## Тестування
 
-1. Встанови `pytest`, якщо ще не встановлено:
-
 ```bash
-pip install pytest
+poetry run pytest -q
 ```
 
-2. Запусти тести:
+## Seed Data
 
+Скрипт `seed_data.py` додає:
+
+- 2 користувачів
+- 2 категорії
+- 2 пости
+- 2 коментарі
+- 3 теги
+
+## Лабораторна робота №5: Аутентифікація та JWT
+
+У цій версії додано систему безпеки, що включає аутентифікацію через JWT токени та HTTP-only Cookie.
+
+### Нові можливості:
+- **JWT Аутентифікація**: Токени видаються при логіні та зберігаються в браузері/клієнті через Cookie.
+- **Salted Passwords**: Паролі зберігаються у хешованому вигляді з використанням HMAC-SHA256 та `SECRET_KEY` як солі.
+- **Захищені маршрути**: Додано механізм перевірки авторизації для доступу до приватних даних.
+
+### Нові ендпоінти:
+- `POST /auth/login` — вхід у систему (видає JWT у Cookie).
+- `POST /auth/logout` — вихід (видаляє Cookie).
+- `GET /users/me` — **[PROTECTED]** отримання даних поточного користувача.
+
+```env
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+## Лабораторна робота №6: Тестування
+
+Реалізовано автоматичне тестування з використанням окремої бази даних PostgreSQL.
+
+### Підготовка тестової БД:
+Перед запуском тестів необхідно створити тестову базу даних у контейнері:
 ```bash
-python -m pytest -q
+docker compose exec db psql -U postgres -c "CREATE DATABASE test_db;"
 ```
 
-## Формат даних
-
-### Запит для створення користувача
-
-```json
-{
-  "username": "oleg",
-  "email": "oleg@example.com",
-  "password": "secret",
-  "is_active": true
-}
+### Запуск тестів:
+Тести запускаються всередині контейнера `api`:
+```bash
+docker compose exec api pytest
 ```
 
-### Запит для оновлення користувача
-
-```json
-{
-  "username": "oleg_updated",
-  "email": "oleg2@example.com",
-  "is_active": false
-}
-```
+### Що протестовано:
+- **CRUD**: Логіка створення, отримання та лістингу користувачів.
+- **API**: Реєстрація, отримання списку користувачів.
+- **Auth**: Вхід (Login), видача JWT у Cookie, доступ до захищених ручок (`/me`) та вихід (Logout).
 
 ## Примітки
 
-- У цьому проєкті використовується in-memory база даних, тому дані не зберігаються після перезапуску сервера.
-- Для повного завершення лабораторної роботи необхідно додати скріншот роботи запитів у гілку `DEV`.
+- Усі запити до БД асинхронні
+- Використано SQLAlchemy 2.0 з async/await
+- Alembic керує міграціями
+- Pydantic для конфігурації та схем
+- Для повного завершення лабораторної роботи додати скріншоти БД з даними у гілку `DEV`

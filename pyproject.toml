@@ -10,6 +10,7 @@ python = "^3.11"
 fastapi = "*"
 uvicorn = "*"
 pydantic = "*"
+pytest = "^9.0.3"
 
 [build-system]
 requires = ["poetry-core"]
