@@ -86,7 +86,7 @@ docker compose exec api python seed_data.py
 1. Запусти PostgreSQL (локально або через Docker):
 
 ```bash
-docker run --name postgres -e POSTGRES_PASSWORD=changeme -e POSTGRES_DB=lab4_db -p 5432:5432 -d postgres:16
+docker run --name postgres -e POSTGRES_PASSWORD=<your_password> -e POSTGRES_DB=lab4_db -p 5432:5432 -d postgres:16
 ```
 
 2. Застосуй міграції:
@@ -177,6 +177,47 @@ poetry run pytest -q
 - 2 пости
 - 2 коментарі
 - 3 теги
+
+## Лабораторна робота №5: Аутентифікація та JWT
+
+У цій версії додано систему безпеки, що включає аутентифікацію через JWT токени та HTTP-only Cookie.
+
+### Нові можливості:
+- **JWT Аутентифікація**: Токени видаються при логіні та зберігаються в браузері/клієнті через Cookie.
+- **Salted Passwords**: Паролі зберігаються у хешованому вигляді з використанням HMAC-SHA256 та `SECRET_KEY` як солі.
+- **Захищені маршрути**: Додано механізм перевірки авторизації для доступу до приватних даних.
+
+### Нові ендпоінти:
+- `POST /auth/login` — вхід у систему (видає JWT у Cookie).
+- `POST /auth/logout` — вихід (видаляє Cookie).
+- `GET /users/me` — **[PROTECTED]** отримання даних поточного користувача.
+
+```env
+SECRET_KEY=your_secret_key_here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+## Лабораторна робота №6: Тестування
+
+Реалізовано автоматичне тестування з використанням окремої бази даних PostgreSQL.
+
+### Підготовка тестової БД:
+Перед запуском тестів необхідно створити тестову базу даних у контейнері:
+```bash
+docker compose exec db psql -U postgres -c "CREATE DATABASE test_db;"
+```
+
+### Запуск тестів:
+Тести запускаються всередині контейнера `api`:
+```bash
+docker compose exec api pytest
+```
+
+### Що протестовано:
+- **CRUD**: Логіка створення, отримання та лістингу користувачів.
+- **API**: Реєстрація, отримання списку користувачів.
+- **Auth**: Вхід (Login), видача JWT у Cookie, доступ до захищених ручок (`/me`) та вихід (Logout).
 
 ## Примітки
 

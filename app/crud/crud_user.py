@@ -19,12 +19,14 @@ async def get_user(db: AsyncSession, user_id: int) -> User | None:
     return result.scalar_one_or_none()
 
 
+from app.core.security import get_password_hash
+
 async def create_user(db: AsyncSession, payload: UserCreate) -> User:
     # Перетворюємо EmailStr у звичайний рядок для бази даних
     db_user = User(
         username=payload.username,
         email=str(payload.email),
-        hashed_password=payload.password,  # В реальних проектах тут має бути хешування
+        hashed_password=get_password_hash(payload.password),
         is_active=payload.is_active,
     )
     db.add(db_user)

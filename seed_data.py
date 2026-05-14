@@ -18,9 +18,10 @@ async def seed_data():
         await session.execute(delete(Tag))
         await session.commit()
 
+        from app.core.security import get_password_hash
         # Create users
-        user1 = User(username="john_doe", email="john@example.com", hashed_password="password1", is_active=True)
-        user2 = User(username="jane_smith", email="jane@example.com", hashed_password="password2", is_active=True)
+        user1 = User(username="john_doe", email="john@example.com", hashed_password=get_password_hash("password123"), is_active=True)
+        user2 = User(username="jane_smith", email="jane@example.com", hashed_password=get_password_hash("securepass456"), is_active=True)
         session.add(user1)
         session.add(user2)
         await session.commit()

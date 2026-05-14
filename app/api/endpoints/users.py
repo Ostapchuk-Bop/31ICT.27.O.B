@@ -7,7 +7,18 @@ from app.crud import crud_user
 from app.db.session import get_db
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 
+from app.api.deps import get_current_user
+from app.models.user import User
+
 router = APIRouter()
+
+@router.get("/me", response_model=UserResponse)
+async def read_user_me(current_user: User = Depends(get_current_user)):
+    """
+    Отримати інформацію про поточного авторизованого користувача.
+    Вимагає наявності валідного JWT у куках.
+    """
+    return current_user
 
 @router.get("/", response_model=List[UserResponse])
 async def read_users(db: AsyncSession = Depends(get_db)):
