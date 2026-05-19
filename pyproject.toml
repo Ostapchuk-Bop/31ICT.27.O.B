@@ -7,10 +7,16 @@ authors = ["you"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "*"
-uvicorn = "*"
-pydantic = "*"
-pytest = "^9.0.3"
+fastapi = "^0.115.0"
+uvicorn = "^0.30.0"
+pydantic = "^2.10.0"
+pydantic-settings = "^2.6.0"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.36"}
+psycopg = {extras = ["binary"], version = "^3.2.0"}
+alembic = "^1.14.0"
+python-dotenv = "^1.0.1"
+python-multipart = "^0.0.12"
+prometheus-client = "^0.20.0"
 
 [build-system]
 requires = ["poetry-core"]
